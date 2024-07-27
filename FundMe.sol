@@ -1,3 +1,5 @@
+
+
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18; // stating our solidity version
 import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
@@ -29,9 +31,8 @@ contract FundMe {
     }
 
 
-    function withdraw() public{
-        require(msg.sender == owner, "Must be owner");
-        
+    function withdraw() public onlyOwner{
+       
         for(uint256 fundIndex = 0; fundIndex < funders.length; fundIndex++ ){
             address funder = funders[fundIndex];
             addressToAmountFunded[funder] = 0;
@@ -46,6 +47,11 @@ contract FundMe {
         // 3. Call
         (bool callSuccess,) = payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess,"Call failed");
+    }
+
+    modifier onlyOwner(){
+         require(msg.sender == owner, "sender is not owner");
+         _;
     }
 
 }
