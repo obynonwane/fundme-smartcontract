@@ -53,8 +53,16 @@ contract FundMe {
     }
 
     modifier onlyOwner(){
-       if(msg.sender != i_owner){ revert NotOwner(); }
+       if(msg.sender != i_owner){revert NotOwner();}
          _;
     }
+
+    receive() external payable { 
+         fund();
+    }
+
+    fallback() external payable {
+        fund();
+     }
 
 }
